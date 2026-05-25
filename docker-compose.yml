@@ -3,8 +3,9 @@ services:
   app:
     build: .
     ports:
-      - "3000:3000"
+      - "3323:3323"
     environment:
+      - PORT=3323
       - DATABASE_URL=file:/app/data/dev.db
       - NEXT_TELEMETRY_DISABLED=1
     volumes:

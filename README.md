@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OMR Ujian
 
-## Getting Started
+Aplikasi web untuk pemrosesan **Optical Mark Recognition (OMR)** pada lembar ujian. Dibangun dengan [Next.js](https://nextjs.org) dan dapat dijalankan lokal maupun menggunakan Docker.
 
-First, run the development server:
+## Fitur
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Scan dan koreksi jawaban OMR dari gambar
+- Kelola kunci jawaban dan template lembar ujian
+- Manajemen hasil scan dan laporan
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Runtime**: Node.js 20
+- **Database**: SQLite (via Prisma ORM)
+- **Styling**: Tailwind CSS v4
+- **Docker**: Node.js 20 Alpine + vips-dev
+
+## Prasyarat
+
+- [Node.js](https://nodejs.org/) >= 20 (untuk local dev)
+- [Docker](https://www.docker.com/) & Docker Compose (untuk Docker)
+- [npm](https://www.npmjs.com/) atau [pnpm](https://pnpm.io/)
+
+## Jalankan dengan Docker (Direkomendasikan)
+
+1. **Clone repository**
+
+   ```bash
+   git clone https://github.com/bimadevs/omr-ujian.git
+   cd omr-ujian
+   ```
+
+2. **Build & jalankan container**
+
+   ```bash
+   docker compose up --build -d
+   ```
+
+3. **Akses aplikasi**
+
+   Buka browser ke: [http://localhost:3323](http://localhost:3323)
+
+4. **Stop container**
+
+   ```bash
+   docker compose down
+   ```
+
+### Catatan Docker
+
+- Port default: **3323**
+- Database SQLite disimpan di `./data/dev.db` (dipersist dengan Docker volume)
+- Upload file disimpan di `./public/uploads/`
+- Prisma migrate otomatis berjalan saat container start
+
+## Jalankan Secara Lokal (Local Dev)
+
+1. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+2. **Generate Prisma Client & Migrate**
+
+   ```bash
+   npx prisma generate
+   npx prisma migrate dev
+   ```
+
+3. **Jalankan development server**
+
+   ```bash
+   npm run dev
+   ```
+
+4. **Akses aplikasi**
+
+   Buka browser ke: [http://localhost:3323](http://localhost:3323)
+
+## Skrip npm
+
+| Perintah          | Keterangan                              |
+| ----------------- | --------------------------------------- |
+| `npm run dev`     | Jalankan server dev di port `3323`      |
+| `npm run build`   | Build aplikasi untuk production         |
+| `npm run start`   | Jalankan server production              |
+| `npm run lint`    | Jalankan ESLint                         |
+
+## Environment Variables
+
+| Variabel          | Default                  | Keterangan          |
+| ----------------- | ------------------------ | ------------------- |
+| `PORT`            | `3323`                   | Port server         |
+| `DATABASE_URL`    | `file:./data/dev.db`     | Path SQLite database|
+| `NEXT_TELEMETRY_DISABLED` | `1`              | Matikan telemetry   |
+
+## Struktur Direktori
+
+```
+.
+├── app/                # Next.js App Router
+│   ├── api/            # API Routes
+│   ├── results/        # Halaman hasil scan
+│   ├── scan/           # Halaman scan OMR
+│   └── templates/      # Halaman template lembar
+├── components/         # React Components
+├── context/            # React Context
+├── hooks/              # Custom React Hooks
+├── lib/                # Utility & logic OMR
+├── prisma/             # Prisma schema & migrations
+├── data/               # SQLite database (volume)
+├── public/uploads/     # File uploads (volume)
+├── Dockerfile
+├── docker-compose.yml
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Lisensi
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+[MIT](LICENSE)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
