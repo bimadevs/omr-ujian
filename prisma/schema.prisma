@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Template {
+  id          String   @id @default(uuid())
+  name        String
+  imagePath   String
+  totalPg     Int
+  totalPgk    Int
+  pgOptions   Int
+  pgkOptions  Int
+  createdAt   DateTime @default(now())
+  answerKeys  AnswerKey[]
+  scans       Scan[]
+  config      TemplateConfig?
+}
+
+model TemplateConfig {
+  id            String   @id @default(uuid())
+  templateId    String   @unique
+  template      Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  
+  pgStartX      Float
+  pgStartY      Float
+  pgBoxWidth    Float
+  pgBoxHeight   Float
+  pgGapX        Float
+  pgGapY        Float
+  pgColGap      Float
+  
+  pgkStartX1    Float
+  pgkStartY1    Float
+  pgkStartX2    Float
+  pgkStartY2    Float
+  pgkBoxWidth   Float
+  pgkBoxHeight  Float
+  pgkGapX       Float
+  pgkGapY       Float
+}
+
+model AnswerKey {
+  id           String   @id @default(uuid())
+  templateId   String
+  template     Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  questionNo   Int
+  questionType String
+  answers      String
+}
+
+model Scan {
+  id          String   @id @default(uuid())
+  templateId  String
+  template    Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  imagePath   String
+  studentName String?
+  scorePg     Int
+  scorePgk    Int
+  totalScore  Float
+  createdAt   DateTime @default(now())
+  answers     ScanAnswer[]
+}
+
+model ScanAnswer {
+  id           String  @id @default(uuid())
+  scanId       String
+  scan         Scan    @relation(fields: [scanId], references: [id], onDelete: Cascade)
+  questionNo   Int
+  questionType String
+  detected     String
+  isCorrect    Boolean
+}
